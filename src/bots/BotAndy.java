@@ -19,7 +19,8 @@ public class BotAndy extends Character {
   @Override
   public void think() {
     if(treasures.isEmpty()) {
-      basicAlgorithm();
+    	// search for all Treasures and put them into a list
+    	basicAlgorithm();
       if(treasures.isEmpty()) {
 //        System.out.println("DONE");
       }
@@ -28,14 +29,22 @@ public class BotAndy extends Character {
       int targetX = treasures.get(0).getX();
       int targetY = treasures.get(0).getY();
       if(isBotHere(targetX, targetY)) {
+    	// if Bot has reached the target, remove the target from the list
         treasures.remove(0);
       }
       else {
+    	// let the Bot move to the target
         goTo(targetX, targetY);
       }
     }
   }
   
+  /**
+   * This is just a test algorithm to go from point A to point B.
+   * This should be replaced by a better algo.
+   * @param x
+   * @param y
+   */
   private void goTo(int x, int y) {
 //    System.out.println(x + ", " + y);
     if(this.x < x) {
