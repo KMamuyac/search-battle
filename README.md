@@ -16,9 +16,12 @@ How to edit your bots:
 - you can also only access `blocks[][]` to help your Bot nagivate through the map
 
 How to move your bot:
-- changing the int variable direction to UP/DOWN/LEFT/RIGHT/STAY. This will move your bot to the direction to direction was set to every time the game updates
-- changing the int variable move to UP/DOWN/LEFT/RIGHT/STAY moves your Bot ONCE (1 time) and your Bot will not move again after the game updates
-- adding ints to the variable moveList. It's an arraylist in which the game will check for the FIRST element in the list and perform that move for ONE game update (1 time) and will delete it, then it performs the next element in the list. This could mean you can have in the list; {UP, UP, LEFT, LEFT} to move your Bot up twice then left twice
+1. `direction`
+ - changing the int variable direction to UP/DOWN/LEFT/RIGHT/STAY. This will move your bot to the direction to direction was set to every time the game updates
+2. `move`
+ - changing the int variable move to UP/DOWN/LEFT/RIGHT/STAY moves your Bot ONCE (1 time) and your Bot will not move again after the game updates
+3. `moveList`
+ - adding ints to the variable moveList. It's an arraylist in which the game will check for the FIRST element in the list and perform that move for ONE game update (1 time) and will delete it, then it performs the next element in the list. This could mean you can have in the list; {UP, UP, LEFT, LEFT} to move your Bot up twice then left twice
 
 Movement priority:
 

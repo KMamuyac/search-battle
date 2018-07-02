@@ -40,6 +40,7 @@ public class Model {
 		display = new Display(map);
 		editor.setContentPane(display);
 		editor.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		editor.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		display.addMouseListener(new MouseAdapter() {
 			@Override

@@ -15,5 +15,9 @@ public class Controller {
 	public void togglePause() {
 		model.togglePause();
 	}
+	
+	public void exit() {
+		model.exit();
+	}
 
 }

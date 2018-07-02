@@ -13,6 +13,8 @@ import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 public class Game extends JFrame {
@@ -60,6 +62,20 @@ public class Game extends JFrame {
 					controller.togglePause();
 			}
 		});
+		
+
+	    this.addWindowListener(new WindowAdapter() {
+	        @Override
+	        public void windowClosing(WindowEvent event) {
+	        	controller.exit();
+	        	exitProcedure();
+	        }
+	    });
+	    
 	}
+    
+    public void exitProcedure() {
+        this.dispose();
+    }
 
 }
