@@ -185,7 +185,7 @@ public class Map {
 			}
 			
 		}
-		printScores(); // this can be commented out to not show the scores
+//		printScores(); // this can be commented out to not show the scores
 	}
 	
 	/**
