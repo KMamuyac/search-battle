@@ -15,8 +15,12 @@ public class Enemy extends Character {
 		int y = this.getY();
 		
 		if(direction == UP && !checkUp(x, y))
+			direction = LEFT;
+		else if(direction == LEFT && !checkLeft(x, y))
 			direction = DOWN;
 		else if(direction == DOWN && !checkDown(x, y))
+			direction = RIGHT;
+		else if(direction == RIGHT && !checkRight(x, y))
 			direction = UP;
 	}
 	

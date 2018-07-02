@@ -1,32 +1,37 @@
 package game;
 
-public class Model {
+import javax.swing.JFrame;
 
-	private Controller controller;
-	private View view;
+public class Model {
+	
 	private Map map;
+	private Display display;
+	private Game game;
 	
 	public Model() {
-//		map = new Map(50, 100);
-//		this.display(map);
-		Reader reader = new Reader();
-		map = reader.getMap("map.txt");
-		map.startGame();
-		view = new View(map);
+		this.setJFrame();
 	}
 	
-	private void display(Map map) {
-		int x, y;
-		for(y = 0; y < map.getHeight(); y++) {
-			for(x = 0; x < map.getWidth(); x++) {
-				if(map.getBlocks()[x][y] instanceof Wall) {
-					System.out.print("[" + x + "," + y + "W]");
-				} else {
-					System.out.print("[" + x + "," + y + " ]");
-				}
-			}
-			System.out.println();
-		}
+	public void setJFrame() {
+		game = new Game(new Controller(this));
+		map = Reader.getMap("map.txt");
+		map.startGame();
+		display = new Display(map);
+		game.setContentPane(display);
+		display.setVisible(true);
+		game.setVisible(true);
+		game.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	}
+	
+	public void openMap(String fileName) {
+		map = Reader.getMap(fileName);
+		display.setMap(map);
+		game.setContentPane(display);
+		map.startGame();
+	}
+	
+	public void togglePause() {
+		map.togglePause();
 	}
 	
 }

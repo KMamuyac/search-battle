@@ -1,4 +1,9 @@
-package game;
+package bots;
+
+import java.awt.Color;
+
+import game.Block;
+import game.Character;
 
 public class BotAndy extends Character {
 
@@ -8,7 +13,8 @@ public class BotAndy extends Character {
 	
 	@Override
 	public void think() {
-		direction = (int)(Math.random() * 2);
+		direction = (int)(Math.random() * 4);
+//		direction = STAY;
 	}
 
 }
