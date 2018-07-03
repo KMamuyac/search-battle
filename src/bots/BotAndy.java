@@ -34,10 +34,10 @@ public class BotAndy extends Character {
   			else {
   				int targetX = treasures.get(0).getX();
   				int targetY = treasures.get(0).getY();
+  				checkTreasures();
   				if(isBotHere(targetX, targetY)) {
   					// if Bot has reached the target, remove the target from the list and search again
-  					treasures.clear();
-  					treasures.addAll(basicAlgorithm());
+  					checkTreasures();
   			  		if(treasures.size() > 0) {
   						targetX = treasures.get(0).getX();
   						targetY = treasures.get(0).getY	();
@@ -229,6 +229,12 @@ public class BotAndy extends Character {
 		  }
 	  }
 	  return STAY;
+  }
+  
+  private void checkTreasures() {
+	  if(!(blocks[treasures.get(0).getX()][treasures.get(0).getY()] instanceof Treasure)) {
+		  treasures.remove(0);
+	  }
   }
   
   private ArrayList<Point> basicAlgorithm() {
