@@ -31,24 +31,23 @@ public class BotAndy extends Character {
   			thinking = true;
   			if(treasures.isEmpty()) {
   				// search for all Treasures and put them into a list
-//  				treasures.addAll(basicAlgorithm());
+  				// treasures.addAll(basicAlgorithm());
   				treasures.addAll(this.searchNearestTreasures());
   			}
   			else {
   				int targetX = treasures.get(0).getX();
   				int targetY = treasures.get(0).getY();
+				// if Bot has reached the target, remove the target from the list and search again
   				if(isBotHere(targetX, targetY)) {
-  					// if Bot has reached the target, remove the target from the list and search again
   					treasures.clear();
-//  					treasures.addAll(basicAlgorithm());
+  					// treasures.addAll(basicAlgorithm());
   	  				treasures.addAll(this.searchNearestTreasures());
-  			  		if(treasures.size() > 0) {
-  						targetX = treasures.get(0).getX();
-  						targetY = treasures.get(0).getY	();
-  			  		}
+					// treasures.remove(0);
+  					targetX = treasures.get(0).getX();
+					targetY = treasures.get(0).getY();
   				}
   				aStarSearch(targetX, targetY);
-//  			goTo(targetX, targetY);
+  				// goTo(targetX, targetY);
   			}
   			thinking = false;
   		}
@@ -70,8 +69,8 @@ public class BotAndy extends Character {
 	}
   
 	private void aStarSearch(int x, int y) {
-		System.out.println("init");
-		System.out.println(x + "," + y);
+		// System.out.println("init");
+		// System.out.println(x + "," + y);
 		
 		// initialize variables
 		int width = blocks.length;
@@ -96,60 +95,47 @@ public class BotAndy extends Character {
 		// assign value to Bot
 		values[this.getX()][this.getY()] = BOT;
 	  
-		System.out.println("search");
-		Boolean loop = true;
+		// System.out.println("search");
 		for(int i = TARGET; i < width * height * height; i++) {
 			for(int a = 0; a < width; a++) {
 				for(int b = 0; b < height; b++) {
 					if(values[a][b] == i) {
-						System.out.println(a + "," + b);
+						// System.out.println(a + "," + b);
 						values = incrementAround(values, a, b, i);
 					}
 				}
 			}
 		}
 	  
-	  
 		int a = this.getX();
 		int b = this.getY();
 		int min = height * width;
 		int tempMove = STAY;
-		if(values[a][b - 1] < min && 
-				values[a][b - 1] != WALL &&
-				values[a][b - 1] != EMPTY &&
-				values[a][b - 1] != SPACE) {
+
+		if(values[a][b - 1] < min && values[a][b - 1] > SPACE) {
 			min = values[a][b - 1];
 			tempMove = UP;
-			System.out.println("UP");
+			// System.out.println("UP");
 		}
-		if(     values[a][b + 1] < min &&
-				values[a][b + 1] != WALL &&
-				values[a][b + 1] != EMPTY &&
-				values[a][b + 1] != SPACE) {
+		if(values[a][b + 1] < min && values[a][b + 1] > SPACE) {
 			min = values[a][b + 1];
 			tempMove = DOWN;
-			System.out.println("DOWN");
+			// System.out.println("DOWN");
 		}
-		if(	 	values[a - 1][b] < min &&
-				values[a - 1][b] != WALL &&
-				values[a - 1][b] != EMPTY &&
-				values[a - 1][b] != SPACE) {
+		if(values[a - 1][b] < min && values[a - 1][b] > SPACE) {
 			min = values[a - 1][b];
 			tempMove = LEFT;
-			System.out.println("LEFT");
+			// System.out.println("LEFT");
 		}
-		if(		values[a + 1][b] < min &&
-				values[a + 1][b] != WALL &&
-				values[a + 1][b] != EMPTY &&
-				values[a + 1][b] != SPACE) {
+		if(values[a + 1][b] < min && values[a + 1][b] > SPACE) {
 			min = values[a + 1][b];
 			tempMove = RIGHT;
-			System.out.println("RIGHT");
+			// System.out.println("RIGHT");
 		}
 	  
 		move = tempMove;
-		System.out.println("move: " + move);
-		System.out.println("end");
+		// System.out.println("move: " + move);
+		// System.out.println("end");
 	}
   
 	private int[][] incrementAround(int[][] values, int x, int y, int i) {
@@ -263,7 +249,7 @@ public class BotAndy extends Character {
 		return null;  
 	}
   
-	private int calculateBasicDistance(Point a	, Point b) {
+	private int calculateBasicDistance(Point a, Point b) {
 		int widthDiff = Math.abs(a.getX() - b.getY());
 		int heightDiff = Math.abs(a.getY() - b.getY()); 
 		return widthDiff + heightDiff;
