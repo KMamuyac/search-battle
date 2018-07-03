@@ -1,6 +1,8 @@
 package bots;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import game.Block;
 import game.Character;
@@ -29,7 +31,8 @@ public class BotAndy extends Character {
   			thinking = true;
   			if(treasures.isEmpty()) {
   				// search for all Treasures and put them into a list
-  				treasures.addAll(basicAlgorithm());
+//  				treasures.addAll(basicAlgorithm());
+  				treasures.addAll(this.searchNearestTreasures());
   			}
   			else {
   				int targetX = treasures.get(0).getX();
@@ -37,7 +40,8 @@ public class BotAndy extends Character {
   				if(isBotHere(targetX, targetY)) {
   					// if Bot has reached the target, remove the target from the list and search again
   					treasures.clear();
-  					treasures.addAll(basicAlgorithm());
+//  					treasures.addAll(basicAlgorithm());
+  	  				treasures.addAll(this.searchNearestTreasures());
   			  		if(treasures.size() > 0) {
   						targetX = treasures.get(0).getX();
   						targetY = treasures.get(0).getY	();
@@ -226,12 +230,40 @@ public class BotAndy extends Character {
     
 		return treasures;
 	}
+	
+	private ArrayList<Point> searchNearestTreasures() {
+		int height = blocks.length;
+		int width = blocks[0].length;
+		Point bot = new Point(this.getX(), this.getY());
+		ArrayList<Point> treasures = new ArrayList<Point>();		
+		
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				if(this.blocks[y][x] instanceof Treasure) {
+					treasures.add(new Point(y, x));
+				}
+			}
+		}
+		
+		for(Point point : treasures) {
+			point.setValue(this.calculateBasicDistance(point, bot));
+		}
+		
+		Collections.sort(treasures, new Comparator<Point>() {
+	    	@Override
+	    	public int compare(Point lhs, Point rhs) {
+	    		return lhs.getValue() < rhs.getValue() ? -1 : (lhs.getValue() > rhs.getValue()) ? 1 : 0;
+	    	}
+		});
+		
+		return treasures;
+	}
   
 	private ArrayList<Point> kruskalsAlgorithm() {
 		return null;  
 	}
   
-	private int calculateBasicDistance(Point a, Point b) {
+	private int calculateBasicDistance(Point a	, Point b) {
 		int widthDiff = Math.abs(a.getX() - b.getY());
 		int heightDiff = Math.abs(a.getY() - b.getY()); 
 		return widthDiff + heightDiff;
@@ -247,10 +279,15 @@ class Point {
   
 	private int x;
 	private int y;
+	private int value;
   
 	public Point(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public void setValue(int value) {
+		this.value = value;
 	}
   
 	public int getX() {
@@ -259,6 +296,10 @@ class Point {
   
 	public int getY() {
 		return y;
+	}
+	
+	public int getValue() {
+		return value;
 	}
   
 }
