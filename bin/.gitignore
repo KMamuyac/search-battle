@@ -1,7 +1,7 @@
 /editor/
 /game/
 /main/
-
+/bots/
 .class
 *.class
 /*.class
