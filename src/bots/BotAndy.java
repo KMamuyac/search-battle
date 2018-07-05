@@ -33,19 +33,31 @@ public class BotAndy extends Character {
   				// search for all Treasures and put them into a list
   				// treasures.addAll(basicAlgorithm());
   				treasures.addAll(this.searchNearestTreasures());
+  				// treasures.addAll(this.searchAStarTreasures());
   			}
   			else {
   				int targetX = treasures.get(0).getX();
   				int targetY = treasures.get(0).getY();
-				// if Bot has reached the target, remove the target from the list and search again
-					// treasures.addAll(basicAlgorithm());
-	  				treasures.addAll(this.searchNearestTreasures());
-  				if(isBotHere(targetX, targetY)) {
+				// treasures.addAll(basicAlgorithm());
+	  			// treasures.addAll(this.searchNearestTreasures());
+  				
+  				if(treasures.size() != this.getTreasures().size()) {
+					treasures.clear();
+	  				treasures.addAll(this.searchAStarTreasures());
+  				}
+  				
+  				// if Bot has reached the target, remove the target from the list and search again
+				if(isBotHere(targetX, targetY)) {
 					// treasures.remove(0);
 					treasures.clear();
-  					targetX = treasures.get(0).getX();
-					targetY = treasures.get(0).getY();
+	  				treasures.addAll(this.searchAStarTreasures());
+		  			// treasures.addAll(this.searchNearestTreasures());
+	  				if(treasures.size() > 0) {
+	  					targetX = treasures.get(0).getX();
+						targetY = treasures.get(0).getY();
+	  				}
   				}
+  				
   				aStarSearch(targetX, targetY);
   				// goTo(targetX, targetY);
   			}
@@ -53,7 +65,7 @@ public class BotAndy extends Character {
   		}
   	}
   	
-	private void goTo(int x, int y) {
+	private void goToSearch(int x, int y) {
 		if(this.x < x) {
 			move = RIGHT;
 		}
@@ -202,6 +214,21 @@ public class BotAndy extends Character {
 		return STAY;
 	}
   
+	private ArrayList<Point> getTreasures() {
+		int height = blocks.length;
+		int width = blocks[0].length;
+    
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				if(this.blocks[y][x] instanceof Treasure) {
+					treasures.add(new Point(y, x));
+				}
+			}
+		}
+    
+		return treasures;
+	}
+	
 	private ArrayList<Point> basicAlgorithm() {
 		int height = blocks.length;
 		int width = blocks[0].length;
@@ -244,6 +271,34 @@ public class BotAndy extends Character {
 		
 		return treasures;
 	}
+	
+	private ArrayList<Point> searchAStarTreasures() {
+		int height = blocks.length;
+		int width = blocks[0].length;
+		Point bot = new Point(this.getX(), this.getY());
+		ArrayList<Point> treasures = new ArrayList<Point>();		
+		
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				if(this.blocks[y][x] instanceof Treasure) {
+					treasures.add(new Point(y, x));
+				}
+			}
+		}
+		
+		for(Point point : treasures) {
+			point.setValue(this.calculateAStarDistance(point, bot));
+		}
+		
+		Collections.sort(treasures, new Comparator<Point>() {
+	    	@Override
+	    	public int compare(Point lhs, Point rhs) {
+	    		return lhs.getValue() < rhs.getValue() ? -1 : (lhs.getValue() > rhs.getValue()) ? 1 : 0;
+	    	}
+		});
+		
+		return treasures;
+	}
   
 	private ArrayList<Point> kruskalsAlgorithm() {
 		return null;  
@@ -255,11 +310,76 @@ public class BotAndy extends Character {
 		return widthDiff + heightDiff;
 	}
   
+	private int calculateAStarDistance(Point c, Point d) {
+		int width = blocks.length;
+		int height = blocks[0].length;
+	  
+		// initialize 2D array
+		int[][] values = new int[width][height];
+		for(int a = 0; a < width; a++) {
+			for(int b = 0; b < height; b++) {
+				if(blocks[a][b] instanceof Wall) {
+					values[a][b] = WALL;
+				}
+				else {
+					values[a][b] = EMPTY;
+				}
+			}
+		}
+	  
+		// assign value to Treasure
+		values[c.getX()][c.getY()] = TARGET;
+	  
+		// assign value to Bot
+		values[d.getX()][d.getY()] = BOT;
+		
+		Boolean loop = true;
+	  
+		for(int i = TARGET; i < width + height && loop; i++) {
+			for(int a = 0; a < width && loop; a++) {
+				for(int b = 0; b < height && loop; b++) {
+					if(values[a][b] == i) {
+						values = incrementAround(values, a, b, i);
+						
+						if(d.getX() == a && d.getY() == b) {
+							loop = false;
+						}
+						
+					}
+				}
+			}
+		}
+	  
+		int a = this.getX();
+		int b = this.getY();
+		int min = height * width;
+
+		if(values[a][b - 1] < min && values[a][b - 1] > SPACE) {
+			min = values[a][b - 1];
+		}
+		if(values[a][b + 1] < min && values[a][b + 1] > SPACE) {
+			min = values[a][b + 1];
+		}
+		if(values[a - 1][b] < min && values[a - 1][b] > SPACE) {
+			min = values[a - 1][b];
+		}
+		if(values[a + 1][b] < min && values[a + 1][b] > SPACE) {
+			min = values[a + 1][b];
+		}
+		
+		return min;
+	}
+	
 	private Boolean isBotHere(int x, int y) {
 		return this.getX() == x && this.getY() == y;
 	}
 
+	private Boolean checkTarget(Point target) {
+		return (blocks[target.getY()][target.getX()] instanceof Treasure);
+	}
+	
 }
+
 
 class Point {
   
