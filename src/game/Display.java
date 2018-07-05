@@ -6,9 +6,27 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
+import bots.BotAndy;
+
 public class Display extends JComponent {
-	
+
+	private static final long serialVersionUID = 7880302203922105415L;
+
 	private Map map;
+	
+	private int height;
+	private int width;
+	private int windowHeight;
+	private int windowWidth;
+	private int i, x, y, xstart, ystart;
+	private int yHeight;
+	private int xWidth;
+
+	private ArrayList <Integer> widthList;
+	private ArrayList <Integer> heightList;
+	
+	private int extraWidth;
+	private int extraHeight;
 	
 	public Display(Map map) {
 		this.map = map;
@@ -28,19 +46,18 @@ public class Display extends JComponent {
 		
 		Color DARKGREY = new Color(64, 64, 64);
 		
-		int height = map.getHeight();
-		int width = map.getWidth();
-		int windowHeight = this.getHeight();
-		int windowWidth = this.getWidth();
-		int i, x, y, xstart, ystart;
-		int yHeight = windowHeight/height;
-		int xWidth = windowWidth/width;
+		height = map.getHeight();
+		width = map.getWidth();
+		windowHeight = this.getHeight();
+		windowWidth = this.getWidth();
+		yHeight = windowHeight/height;
+		xWidth = windowWidth/width;
 
-		ArrayList <Integer> widthList = new ArrayList <Integer> ();
-		ArrayList <Integer> heightList = new ArrayList <Integer> ();
+		widthList = new ArrayList <Integer> ();
+		heightList = new ArrayList <Integer> ();
 		
-		int extraWidth = windowWidth - (xWidth * width);
-		int extraHeight = windowHeight - (yHeight * height);
+		extraWidth = windowWidth - (xWidth * width);
+		extraHeight = windowHeight - (yHeight * height);
 		
 		if(extraWidth < 0)
 			extraWidth = width - 1;
@@ -81,6 +98,8 @@ public class Display extends JComponent {
         			gg.setColor(Color.BLACK);
         		else if(map.getBlocks()[x][y] instanceof Character)
         			gg.setColor(map.getBlocks()[x][y].getColor());
+        		else if(map.getBlocks()[x][y] instanceof BotAndy)
+        			gg.setColor(map.getBlocks()[x][y].getColor());
         		else if(map.getBlocks()[x][y] instanceof Treasure)
         			gg.setColor(map.getBlocks()[x][y].getColor());
         		else
@@ -105,5 +124,16 @@ public class Display extends JComponent {
         }
 
 	}
+	
+	public void setMap(Map map) {
+		this.map = map;
+	}
+    
+    public int[] getCoordinates(int x, int y) {
+    	int[] coordinates = new int[2];
+    	coordinates[0] = x / xWidth;
+    	coordinates[1] = y / yHeight;
+    	return coordinates;
+    }
 
 }
