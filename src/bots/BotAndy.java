@@ -41,14 +41,21 @@ public class BotAndy extends Character {
 				// treasures.addAll(basicAlgorithm());
 	  			// treasures.addAll(this.searchNearestTreasures());
   				
+  				if(treasures.size() != this.getTreasures().size()) {
+					treasures.clear();
+	  				treasures.addAll(this.searchAStarTreasures());
+  				}
+  				
   				// if Bot has reached the target, remove the target from the list and search again
 				if(isBotHere(targetX, targetY)) {
 					// treasures.remove(0);
 					treasures.clear();
-	  				// treasures.addAll(this.searchAStarTreasures());
-		  			treasures.addAll(this.searchNearestTreasures());
-  					targetX = treasures.get(0).getX();
-					targetY = treasures.get(0).getY();
+	  				treasures.addAll(this.searchAStarTreasures());
+		  			// treasures.addAll(this.searchNearestTreasures());
+	  				if(treasures.size() > 0) {
+	  					targetX = treasures.get(0).getX();
+						targetY = treasures.get(0).getY();
+	  				}
   				}
   				
   				aStarSearch(targetX, targetY);
@@ -324,13 +331,20 @@ public class BotAndy extends Character {
 		values[c.getX()][c.getY()] = TARGET;
 	  
 		// assign value to Bot
-		values[d.getX()][d.getX()] = BOT;
+		values[d.getX()][d.getY()] = BOT;
+		
+		Boolean loop = true;
 	  
-		for(int i = TARGET; i < width * height * height; i++) {
-			for(int a = 0; a < width; a++) {
-				for(int b = 0; b < height; b++) {
+		for(int i = TARGET; i < width + height && loop; i++) {
+			for(int a = 0; a < width && loop; a++) {
+				for(int b = 0; b < height && loop; b++) {
 					if(values[a][b] == i) {
 						values = incrementAround(values, a, b, i);
+						
+						if(d.getX() == a && d.getY() == b) {
+							loop = false;
+						}
+						
 					}
 				}
 			}
@@ -360,6 +374,10 @@ public class BotAndy extends Character {
 		return this.getX() == x && this.getY() == y;
 	}
 
+	private Boolean checkTarget(Point target) {
+		return (blocks[target.getY()][target.getX()] instanceof Treasure);
+	}
+	
 }
 
 
