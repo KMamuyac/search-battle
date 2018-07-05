@@ -18,6 +18,8 @@ public class Character extends Block implements Runnable {
 	protected Block[][] blocks;
 	protected int points;
 	
+	protected Boolean play = true;
+	
 	/**
 	 * This function is the contructor of Character.
 	 * @param blocks is the 2D array of the map containing what is inside the map.
@@ -45,7 +47,7 @@ public class Character extends Block implements Runnable {
 	 */
 	@Override
 	public void run() {
-		while(true) {
+		while(play) {
             try {Thread.sleep(10);} catch (Exception ex) {}
             this.think();
 		}
@@ -65,6 +67,10 @@ public class Character extends Block implements Runnable {
 	 */
 	protected void think() {
 		direction = (int)(Math.random() * 4);
+	}
+	
+	protected void stop() {
+		this.play = false;
 	}
 	
 	/**
