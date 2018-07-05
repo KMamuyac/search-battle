@@ -10,13 +10,12 @@ public class Character extends Block implements Runnable {
 	protected static final int RIGHT = 3;
 	protected static final int STAY = 4;
 	protected static final int NONE = 4;
-	
 	protected int direction = STAY;
 	protected int move = NONE;
 	protected ArrayList<Integer> moveList;
-	
 	protected Block[][] blocks;
 	protected int points;
+	protected Boolean play = true;
 	
 	protected Boolean play = true;
 	
