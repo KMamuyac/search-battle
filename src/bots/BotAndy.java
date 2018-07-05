@@ -38,11 +38,11 @@ public class BotAndy extends Character {
   				int targetX = treasures.get(0).getX();
   				int targetY = treasures.get(0).getY();
 				// if Bot has reached the target, remove the target from the list and search again
+					// treasures.addAll(basicAlgorithm());
+	  				treasures.addAll(this.searchNearestTreasures());
   				if(isBotHere(targetX, targetY)) {
-  					treasures.clear();
-  					// treasures.addAll(basicAlgorithm());
-  	  				treasures.addAll(this.searchNearestTreasures());
 					// treasures.remove(0);
+					treasures.clear();
   					targetX = treasures.get(0).getX();
 					targetY = treasures.get(0).getY();
   				}
